@@ -20,6 +20,8 @@ If the project compiles fine and the generated object file is identical to the o
 
 Simply run `./mincompile.sh` in the root of your project directory (or wherever the makefile is)
 
+Currently, `mincompile` will not directly remove `#include`s that it thinks are unnecessary. Instead, they will be commented out and noted with `//UNNECESSARY `, e.g. `#include "header.h"` will be turned into `//UNNECESSARY #include "header.h"`. This allows you to manually review the results for accuracy before committing them.
+
 ### Flags
 
 `-s` or `--skip` to provide a file containing the relative paths of files *not* to scan for unnecessary `#include`s. If your makefile is not compiling part of your project, such files should be listed here so they are ignored.
