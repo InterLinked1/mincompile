@@ -2,9 +2,12 @@
 
 # mincompile (C) InterLinked, 2021
 
-MINCOMPILE_MAKE=ccache # change to make if you don't have ccache
+MINCOMPILE_MAKE=ccache # use ccache if possible
 USESKIPFILE=0
 SKIPFILE=""
+if ! which ccache > /dev/null; then
+	MINCOMPILE_MAKE=make # fall back to make
+fi
 
 PARSED_ARGUMENTS=$(getopt -n mincompile -o s: -l skip: -- "$@")
 if [ $? -ne 0 ]; then
@@ -66,6 +69,10 @@ for f in $files; do
 	includes=$( grep '#include' "$f" )
 	withoutextension=`printf '%s\n' "$f" | sed -r 's|^(.*?)\.\w+$|\1|'`
 	objectfile="$withoutextension.o"
+	if [ ! -f "$objectfile" ]; then
+		printf "Skipping uncompiled file '%s'\n" "$f"
+		continue
+	fi
 	originalhash=$( md5sum "$objectfile" | cut -d' ' -f1 )
 	for include in $includes; do # check if each include in this file is necessary
 		printf "Processing include directive %s\n" "$include"
