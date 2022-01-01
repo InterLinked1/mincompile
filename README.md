@@ -29,6 +29,6 @@ Currently, `mincompile` will not directly remove `#include`s that it thinks are 
 ## Usage Tips
 
 - In your makefile, your `CFLAGS` should include `-Werror` so that any warnings are treated as errors. Otherwise, warnings will cause `make` to exit with exit code 0 which will trick `mincompile` into thinking everything went okay.
-- In your makefile, everything in your project should be compiled by `make`. Otherwise, source code that isn't compiled will have all its `#include`s flagged for removal, since the project successfully builds without them
+- In your makefile, everything in your project should be compiled by `make`. However, uncompiled source code will be skipped.
 - Because this tool will potentially recompile your project thousands or tens of thousands of times, you should expect that it may run for a while (potentially multiple days, depending on the specs of your machine). Using a compiler cache like `ccache` may help speed up recompilations.
    - To easily install `ccache`, use [PhreakScript](https://github.com/InterLinked1/phreakscript) to run `phreaknet ccache`
